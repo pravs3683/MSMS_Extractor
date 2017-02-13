@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<tool_dependency>
+  <package name="proteowizard" version="3.0.9016">
+    <repository changeset_revision="e9ae8f0be737" name="package_proteowizard_3_0_9016" owner="galaxyp" toolshed="https://toolshed.g2.bx.psu.edu" />
+  </package>
+</tool_dependency>
