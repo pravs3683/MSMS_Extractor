@@ -1,6 +1,6 @@
 
 <tool id="MSMS_Extractor" name="MSMS_Extractor" version="1.0.0">
-  <description>Removes identified scans from the mzML file using PSM report.</description>
+  <description>Removes scans with identified PSMs from the mzML file(s).</description>
   <requirements>
       <requirement type="package" version="3.0.9016">proteowizard</requirement>
       <requirement type="package" version="3.4">pyteomics</requirement>
@@ -21,6 +21,6 @@
   
 
   <help>
-Testing to run MSMS_Extractor script in Galaxy
+MSMS_Extractor reads scan numbers from the PSM report (scan numbers with identified PSM) and removes it from the mzML file.
   </help>
 </tool>
