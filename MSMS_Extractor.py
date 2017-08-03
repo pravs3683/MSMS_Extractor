@@ -4,6 +4,7 @@
 # University of Minnesota
 #
 #
+#
 
 def main():
     from pyteomics import mzml
@@ -15,9 +16,15 @@ def main():
     import pandas as pd
     from operator import itemgetter
     from itertools import groupby
-    if len(sys.argv) >= 5:
+    import random
+    
+    if len(sys.argv) >= 7:
         # Start of Reading Scans from PSM file
         # Creating dictionary of PSM file: key = filename key = list of scan numbers
+        
+        removeORretain = sys.argv[5].strip()
+        randomScans = int(sys.argv[6].strip())
+        
         ScanFile = sys.argv[2]
         spectrumTitleList = list(pd.read_csv(ScanFile, "\t")['Spectrum Title'])
         scanFileNumber = [[".".join(each.split(".")[:-3]), int(each.split(".")[-2:-1][0])] for each in spectrumTitleList]
@@ -34,7 +41,6 @@ def main():
         outPath = sys.argv[3]
         ##outFile = sys.argv[3].split("/")[-1]
         allScanList = []
-        
         # Read all scan numbers using indexedmzML/indexList/index/offset tags
         for k in mzml.read(inputPath).iterfind('indexedmzML/indexList/index/offset'):
             if re.search("scan=(\d+)", k['idRef']):
@@ -44,17 +50,28 @@ def main():
         
         fraction_name = sys.argv[4]
         if scanDict.has_key(fraction_name):
-            scan2remove = scanDict[fraction_name]
+            scansInList = scanDict[fraction_name]
         else:
-            scan2remove = []
-        scan2retain = list(set(allScanList) - set(scan2remove))
-        scan2retain.sort()
-        scansRemoved = list(set(allScanList) - set(scan2retain))
-        # scan2retain contains scans that is to be retained
+            scansInList = []
+        scansNotInList = list(set(allScanList) - set(scansInList))
         
+        if removeORretain == "remove":
+            scan2retain = scansNotInList
+            scan2retain.sort()
+            scansRemoved = scansInList
+            # scan2retain contains scans that is to be retained
+            
+        elif removeORretain == "retain":
+            # Randomly select spectra
+            random_scans = list(map(lambda _: random.choice(scansNotInList), range(randomScans)))
+            
+            scan2retain = random_scans + scansInList
+            scan2retain.sort()
+            scansRemoved = list(set(allScanList) - set(scan2retain))
+            # scan2retain contains scans that is to be retained
+            
         # Print Stats
         print >> sys.stdout,"Total number of Scan Numbers: %d" % len(list(set(allScanList)))
-        print >> sys.stdout,"Number of Scans to remove: %d" % len(list(set(scan2remove)))
         print >> sys.stdout,"Number of Scans retained: %d" % len(scan2retain)
         print >> sys.stdout,"Number of Scans removed: %d" % len(scansRemoved)
         

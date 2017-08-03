@@ -1,11 +1,11 @@
 
-<tool id="MSMS_Extractor" name="MSMS_Extractor" version="1.0.0">
-  <description>Removes scans with identified PSMs from the mzML file(s).</description>
+<tool id="MSMS_Extractor" name="MSMS_Extractor" version="1.1.0">
+  <description>Extract scans based on PSM report from the mzML file(s).</description>
   <requirements>
       <requirement type="package" version="3.0.9016">proteowizard</requirement>
       <requirement type="package" version="3.4">pyteomics</requirement>
   </requirements>
-  <command interpreter="python"><![CDATA[MSMS_Extractor.py $spectrumfile $psmreportfile $output ${spectrumfile.name.rsplit('.',1)[0]}]]></command>
+  <command interpreter="python"><![CDATA[MSMS_Extractor.py $spectrumfile $psmreportfile $output ${spectrumfile.name.rsplit('.',1)[0]} $removeretain.doremoveretain $removeretain.num_random_scans]]></command>
   <inputs>
     <param name="spectrumfile" type="data" format="mzml">
       <label>Input mzML File</label>
@@ -13,6 +13,17 @@
     <param name="psmreportfile" type="data" format="tabular">
       <label>Input PSM Report File</label>
     </param>
+    
+    <conditional name="removeretain">
+        <param name="doremoveretain" type="boolean" truevalue="retain" falsevalue="remove" label="Remove or Retain the given Scans" help="Retain=Yes; Remove=No (default)" />
+        <when value="remove">
+            <param name="num_random_scans" type="hidden" value="0" />
+        </when>
+        <when value="retain">
+            <param name="num_random_scans" type="integer" label="Add N random scans in addition to those in the list" value="0" optional="false" />
+        </when>
+      </conditional>
+      
   </inputs>
 
   <outputs>
@@ -21,6 +32,16 @@
   
 
   <help>
-MSMS_Extractor reads scan numbers from the PSM report (scan numbers with identified PSM) and removes it from the mzML file.
+MSMS_Extractor reads scan numbers from the PSM report (scan numbers with identified PSM) and gives option to create a new mzml file, either with those scans or without those scans.
+
+Remove option:
+Creates a new mzml file with all the unidentified scans (removes those that are in the PSM report).
+
+Retain option:
+Creates a new mzml file with only those scans that is present in the PSM report. In addition to this, it also has an option to add N number of randomly selected scans to the output mzml file.
+
+
+Please Note: This tool currently works only with PeptideShaker generated PSM report file.
+
   </help>
 </tool>
