@@ -15,7 +15,7 @@
     </param>
     
     <conditional name="removeretain">
-        <param name="doremoveretain" type="boolean" truevalue="retain" falsevalue="remove" label="Remove or Retain the given Scans" help="Retain=Yes; Remove=No (default)" />
+        <param name="doremoveretain" type="boolean" truevalue="retain" falsevalue="remove" label="Retain or Remove the given Scans" help="Retain=Yes; Remove=No (default)" />
         <when value="remove">
             <param name="num_random_scans" type="hidden" value="0" />
         </when>
