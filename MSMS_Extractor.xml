@@ -34,12 +34,18 @@
   <help>
 MSMS_Extractor reads scan numbers from the PSM report (scan numbers with identified PSM) and gives option to create a new mzml file, either with those scans or without those scans.
 
-Remove option:
+----
+
+REMOVE option:
+
 Creates a new mzml file with all the unidentified scans (removes those that are in the PSM report).
 
-Retain option:
+
+RETAIN option:
+
 Creates a new mzml file with only those scans that is present in the PSM report. In addition to this, it also has an option to add N number of randomly selected scans to the output mzml file.
 
+----
 
 Please Note: This tool currently works only with PeptideShaker generated PSM report file.
 
